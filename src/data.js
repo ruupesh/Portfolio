@@ -10,7 +10,7 @@ const portfolioData = {
         leetcode: "https://leetcode.com/ruupesh",
         phone: "+91-9604996583",
         location: "Pune, India",
-        resumeUrl: "./Rupesh_Bodkhe-SDE2.pdf",
+        resumeUrl: import.meta.env.VITE_RESUME_URL,
         summary: "AI-enabled Software Engineer with 3.5+ years of experience building and shipping end-to-end backend and AgenticAI solutions using diverse Python frameworks. Experienced in rapidly developing microservices, event-driven architectures, and multi-agent GenAI systems on cloud-native infrastructure. Comfortable owning features from design to production, integrating LLMs, APIs, frontend components, and DevOps pipelines to deliver scalable products."
     },
     
