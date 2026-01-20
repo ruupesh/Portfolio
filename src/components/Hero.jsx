@@ -61,7 +61,7 @@ const Hero = () => {
         </p>
         <div className="hero-buttons">
           <a href="#projects" className="btn btn-primary">My Work</a>
-          <a href={personal.resumeUrl} download className="btn btn-outline">📄 Download Resume</a>
+          <a href={personal.resumeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline">📄 Download Resume</a>
           <a href="#contact" className="btn btn-outline">Contact Me</a>
         </div>
       </div>

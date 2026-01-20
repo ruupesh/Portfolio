@@ -78,7 +78,8 @@ const Contact = () => {
             </a>
             <a
               href={personal.resumeUrl}
-              download
+              target="_blank"
+              rel="noopener noreferrer"
               className="social-icon resume-download"
               title="Download Resume"
             >
