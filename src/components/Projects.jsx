@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { usePortfolio } from "../context/PortfolioContext";
 
 const Projects = () => {
@@ -13,12 +12,9 @@ const Projects = () => {
         </div>
         <div className="projects-grid">
           {projects.map((project, i) => (
-            <motion.div
+            <div
               key={project.name}
-              className="project-card"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
+              className="project-card reveal"
             >
               <div className="project-top">
                 <div className="project-header">
@@ -48,7 +44,7 @@ const Projects = () => {
                   ))}
                 </ul>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -63,7 +63,7 @@ const getFallbackResponse = (message) => {
 
 **Programming Languages:** Python, SQL (Postgres, Oracle), JavaScript
 **GenAI:** LLMs (OpenAI & Claude), AWS Bedrock, Prompt Engineering, Vector Databases, LangChain, RAG
-**AgenticAI:** MultiAgent Architecture, Context Engineering, DeepAgents, LangGraph, FastMCP
+**AgenticAI:** MultiAgent Architecture, Context Engineering, DeepAgents, LangGraph, FastMCP, A2A, Google ADK
 **Backend & APIs:** Django REST Framework, FastAPI, Celery, Redis
 **Frontend:** React.js
 **Cloud & DevOps:** AWS, Azure, GCP, Docker, Github, Github Actions, Jenkins, Nginx

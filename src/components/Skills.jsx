@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { usePortfolio } from "../context/PortfolioContext";
 
 const Skills = () => {
@@ -79,14 +78,11 @@ const Skills = () => {
         </div>
         <div className="skills-grid">
           {skillCategories.map((cat, i) => (
-            <motion.div
+            <div
               key={cat.name}
               className={`skill-category reveal ${cat.emphasis}`}
               data-emphasis={cat.emphasis}
               style={{ "--cat-color": cat.color }}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
             >
               <div className="cat-header">
                 <div
@@ -102,19 +98,15 @@ const Skills = () => {
               </div>
               <div className="skill-tags-wrapper">
                 {cat.list.map((skill, index) => (
-                  <motion.div
+                  <div
                     key={skill}
                     className="skill-tag"
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    style={{ animationDelay: `${index * 0.05}s` }}
                   >
                     <span className="skill-name">{skill}</span>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

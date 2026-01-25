@@ -20,17 +20,52 @@ const BackgroundEffects = () => {
     const on = (el, evt, handler, opts) => el && el.addEventListener(evt, handler, opts);
     const off = (el, evt, handler) => el && el.removeEventListener(evt, handler);
 
+    // ---------- Animated counters for .stat-number[data-target] ----------
+    const animateCounter = (el) => {
+      const target = parseFloat(el.getAttribute("data-target") || "0");
+      const duration = 2000;
+      const step = target / (duration / 16);
+      let current = 0;
+      const tick = () => {
+        current += step;
+        if (current < target) {
+          el.textContent = `${Math.floor(current)}`;
+          requestAnimationFrame(tick);
+        } else {
+          el.textContent = Number.isInteger(target) ? `${target}` : `${target.toFixed(1)}`;
+        }
+      };
+      tick();
+    };
+
     // ---------- Reveal on scroll (IntersectionObserver) ----------
-    const revealElements = Array.from(document.querySelectorAll(".reveal"));
+    // Observe sections to reveal all their content at once
+    const sections = Array.from(document.querySelectorAll("section"));
     const revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add("active");
+          if (entry.isIntersecting) {
+            // Reveal everything in this section
+            const reveals = entry.target.querySelectorAll(".reveal");
+            reveals.forEach((el) => el.classList.add("active"));
+            
+            // Trigger all counters in this section
+            const stats = entry.target.querySelectorAll(".stat-number[data-target]");
+            stats.forEach(s => {
+              if (s.textContent === "0") {
+                animateCounter(s);
+              }
+            });
+          }
         });
       },
       { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
     );
-    revealElements.forEach((el) => revealObserver.observe(el));
+    sections.forEach((el) => revealObserver.observe(el));
+
+    // Handle .reveal elements that might be outside sections
+    const loneReveals = Array.from(document.querySelectorAll(".reveal")).filter(el => !el.closest('section'));
+    loneReveals.forEach(el => revealObserver.observe(el));
 
     // ---------- Parallax for hero content ----------
     const heroContent = document.querySelector(".hero-content");
@@ -103,37 +138,6 @@ const BackgroundEffects = () => {
       on(card, "mouseleave", handleTiltLeave);
     });
 
-    // ---------- Animated counters for .stat-number[data-target] ----------
-    const statNumbers = Array.from(document.querySelectorAll(".stat-number[data-target]"));
-    const animateCounter = (el) => {
-      const target = parseFloat(el.getAttribute("data-target") || "0");
-      const duration = 2000;
-      const step = target / (duration / 16);
-      let current = 0;
-      const tick = () => {
-        current += step;
-        if (current < target) {
-          el.textContent = `${Math.floor(current)}`;
-          requestAnimationFrame(tick);
-        } else {
-          el.textContent = Number.isInteger(target) ? `${target}` : `${target.toFixed(1)}`;
-        }
-      };
-      tick();
-    };
-    const counterObserver = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            animateCounter(entry.target);
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-    statNumbers.forEach((el) => counterObserver.observe(el));
-
     // ---------- Magnetic buttons ----------
     const buttons = Array.from(document.querySelectorAll(".btn"));
     const handleBtnMove = (e) => {
@@ -196,7 +200,6 @@ const BackgroundEffects = () => {
     // ---------- Cleanup ----------
     return () => {
       revealObserver.disconnect();
-      counterObserver.disconnect();
       off(window, "scroll", parallaxHandler);
 
       tiltCards.forEach((card) => {

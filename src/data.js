@@ -17,7 +17,7 @@ const portfolioData = {
     skills: {
         languages: ["Python", "SQL (Postgres, Oracle)", "JavaScript"],
         genai: ["LLMs (OpenAI & Claude)", "Azure AI Foundry", "AWS Bedrock", "NLP", "Prompt Engineering", "Vector Databases", "Embeddings", "LangChain", "RAG"],
-        agenticai: ["MultiAgent Architecture", "Context Engineering", "DeepAgents", "LangGraph", "FastMCP"],
+        agenticai: ["MultiAgent Architecture", "Context Engineering", "DeepAgents", "LangGraph", "FastMCP", "A2A", "Google ADK"],
         backend: ["Django REST Framework", "FastAPI", "Celery", "Redis"],
         frontend: ["React.js"],
         cloud: ["AWS", "Azure", "GCP", "Docker", "Github", "Github Actions", "Jenkins", "Nginx"],
@@ -95,7 +95,7 @@ const portfolioData = {
         {
             name: "Multi-Agent System POC",
             description: "Scalable multi-agent architecture capable of orchestrating hundreds of tools and sub-agents",
-            technologies: ["Python", "Context Engineering", "Prompt Engineering", "DeepAgents", "LangChain", "LLMs", "FastMCP"],
+            technologies: ["Python", "Context Engineering", "Prompt Engineering", "DeepAgents", "LangChain", "LLMs", "FastMCP", "A2A", "Google ADK"],
             highlights: [
                 "Designed and implemented multi-agent POC orchestrating hundreds of tools and sub-agents",
                 "Integrated legacy APIs and MCP tools",

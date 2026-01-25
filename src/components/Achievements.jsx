@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { usePortfolio } from "../context/PortfolioContext";
 
 const vendorColor = (vendor) => {
@@ -50,13 +49,9 @@ const Achievements = () => {
             </div>
             <div className="certifications-grid">
               {parsedCerts.map((cert, idx) => (
-                <motion.div
+                <div
                   key={`${cert.name}-${idx}`}
                   className="cert-card"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.1 }}
-                  style={{ animationDelay: `${idx * 0.1}s` }}
                 >
                   <div
                     className="cert-vendor"
@@ -80,7 +75,7 @@ const Achievements = () => {
                       <div className="cert-verified">✓ Verified</div>
                     )}
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -96,19 +91,15 @@ const Achievements = () => {
               {awards.map((award, idx) => {
                 const { type, icon } = getAwardType(award);
                 return (
-                  <motion.div
+                  <div
                     key={`${type}-${idx}`}
                     className={`award-card ${type}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.1 }}
-                    style={{ animationDelay: `${idx * 0.1}s` }}
                   >
                     <div className="award-icon-wrapper">
                       <span className="award-icon">{icon}</span>
                     </div>
                     <div className="award-text">{award}</div>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>

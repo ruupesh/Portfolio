@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { usePortfolio } from "../context/PortfolioContext";
 import linkedinIcon from "../assets/linkedin.svg";
 import githubIcon from "../assets/github.svg";
@@ -16,11 +15,8 @@ const Contact = () => {
         <div className="section-header reveal">
           <h2>Let's Connect</h2>
         </div>
-        <motion.div
+        <div
           className="contact-card reveal"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
         >
           <p className="contact-text">
             Let's discuss how we can work together on innovative AI solutions.
@@ -86,7 +82,7 @@ const Contact = () => {
               📄
             </a>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

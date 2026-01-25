@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { usePortfolio } from "../context/PortfolioContext";
 
 const companyUrls = {
@@ -29,13 +28,9 @@ const Experience = () => {
             const url = companyUrls[exp.company];
 
             return (
-              <motion.div
+              <div
                 key={`${exp.company}-${i}`}
                 className="timeline-item reveal"
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.2, duration: 0.6 }}
-                style={{ animationDelay: `${i * 0.2}s` }}
               >
                 <div className={`timeline-dot ${isCurrent ? "current" : ""}`}></div>
                 <div className="timeline-content">
@@ -77,25 +72,18 @@ const Experience = () => {
                     </div>
                     <div className="responsibility-list">
                       {exp.responsibilities.map((resp, index) => (
-                        <motion.div
+                        <div
                           key={index}
                           className="responsibility-item"
-                          initial={{ opacity: 0, y: 10 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          transition={{
-                            delay: i * 0.2 + index * 0.1,
-                            duration: 0.4,
-                          }}
-                          style={{ animationDelay: `${i * 0.2 + index * 0.1}s` }}
                         >
                           <div className={`resp-bullet ${hasMetrics(resp) ? "metric" : ""}`}></div>
                           <div className="resp-text">{resp}</div>
-                        </motion.div>
+                        </div>
                       ))}
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>

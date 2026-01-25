@@ -297,12 +297,7 @@ ul { list-style: none; }
     left: 0;
     width: 200%;
     height: 100px;
-    background: repeating-linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(139, 92, 246, 0.03) 25%,
-        transparent 50%
-    );
+    /* background: repeating-linear-gradient(90deg, transparent 0%, rgba(139, 92, 246, 0.03) 25%, transparent 50%); */
     animation: wave 20s linear infinite;
     z-index: 0;
 }
