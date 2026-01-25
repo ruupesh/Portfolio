@@ -93,7 +93,7 @@ This serves the production build locally so you can test it before deployment.
 #### Step 1: Update Vite Configuration
 
 Update `vite.config.js` to include your GitHub repository base path:
-
+ 
 ```javascript
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
