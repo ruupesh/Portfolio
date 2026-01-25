@@ -60,9 +60,9 @@ const Hero = () => {
           Transforming complex AI requirements into production-grade solutions. Specialized in Backend Development, GenAI, Agentic Systems, and Cloud-Native Architecture.
         </p>
         <div className="hero-buttons">
-          <a href="#projects" className="btn btn-primary">My Work</a>
+          <a href="/projects" className="btn btn-primary">My Work</a>
           <a href={personal.resumeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline">📄 Download Resume</a>
-          <a href="#contact" className="btn btn-outline">Contact Me</a>
+          <a href="/contact" className="btn btn-outline">Contact Me</a>
         </div>
       </div>
     </section>

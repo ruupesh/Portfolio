@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 /**
  * BackgroundEffects
@@ -11,10 +12,28 @@ import React, { useEffect } from "react";
  * - Animated counters for .stat-number[data-target]
  * - Magnetic hover effect for .btn
  * - Cursor glow follower
+ * - URL path synchronization
  */
 const BackgroundEffects = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
     if (typeof window === "undefined" || typeof document === "undefined") return;
+
+    // ---------- Initial Scroll based on URL path ----------
+    const path = window.location.pathname.replace("/Portfolio/", "").replace("/", "");
+    if (path && path !== "") {
+      setTimeout(() => {
+        const target = document.getElementById(path);
+        if (target) {
+          const navbar = document.querySelector(".navbar");
+          const offset = navbar ? navbar.offsetHeight : 80;
+          const top = target.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: "smooth" });
+        }
+      }, 100);
+    }
 
     // ---------- Helpers ----------
     const on = (el, evt, handler, opts) => el && el.addEventListener(evt, handler, opts);
@@ -39,31 +58,33 @@ const BackgroundEffects = () => {
     };
 
     // ---------- Reveal on scroll (IntersectionObserver) ----------
-    // Observe sections to reveal all their content at once
     const sections = Array.from(document.querySelectorAll("section"));
     const revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Reveal everything in this section
             const reveals = entry.target.querySelectorAll(".reveal");
             reveals.forEach((el) => el.classList.add("active"));
             
-            // Trigger all counters in this section
             const stats = entry.target.querySelectorAll(".stat-number[data-target]");
             stats.forEach(s => {
-              if (s.textContent === "0") {
-                animateCounter(s);
-              }
+              if (s.textContent === "0") animateCounter(s);
             });
+
+            // Update URL path without triggering re-render if possible
+            const id = entry.target.id;
+            if (id) {
+              const newPath = id === "home" ? "/Portfolio/" : `/Portfolio/${id}`;
+              if (window.location.pathname !== newPath) {
+                window.history.replaceState(null, "", newPath);
+              }
+            }
           }
         });
       },
       { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
     );
     sections.forEach((el) => revealObserver.observe(el));
-
-    // Handle .reveal elements that might be outside sections
     const loneReveals = Array.from(document.querySelectorAll(".reveal")).filter(el => !el.closest('section'));
     loneReveals.forEach(el => revealObserver.observe(el));
 
@@ -80,14 +101,11 @@ const BackgroundEffects = () => {
     on(window, "scroll", parallaxHandler, { passive: true });
     parallaxHandler();
 
-    // ---------- Particles backdrop ----------
+    // ---------- Particles Backdrop ----------
     const particlesContainer = document.createElement("div");
     particlesContainer.className = "particles";
     document.body.appendChild(particlesContainer);
-
-    const particleCount = 30;
-    const particles = [];
-    for (let i = 0; i < particleCount; i++) {
+    for (let i = 0; i < 30; i++) {
       const p = document.createElement("div");
       p.className = "particle";
       p.style.left = `${Math.random() * 100}%`;
@@ -97,16 +115,13 @@ const BackgroundEffects = () => {
       p.style.animationDelay = `${Math.random() * 20}s`;
       p.style.animationDuration = `${Math.random() * 10 + 15}s`;
       particlesContainer.appendChild(p);
-      particles.push(p);
     }
 
-    // ---------- Floating tech icons ----------
-    const icons = ["💻", "🚀", "⚡", "🎯", "🔧", "☁️", "🤖", "📊", "🧠", "⚙️"];
+    // ---------- Floating Icons ----------
     const floatingContainer = document.createElement("div");
     floatingContainer.className = "floating-icons";
     document.body.appendChild(floatingContainer);
-
-    icons.forEach((icon, i) => {
+    ["💻", "🚀", "⚡", "🎯", "🔧", "☁️", "🤖", "📊", "🧠", "⚙️"].forEach((icon, i) => {
       const el = document.createElement("div");
       el.className = "floating-icon";
       el.textContent = icon;
@@ -116,116 +131,88 @@ const BackgroundEffects = () => {
       floatingContainer.appendChild(el);
     });
 
-    // ---------- 3D tilt for .tilt-card ----------
+    // ---------- Tilt Cards ----------
     const tiltCards = Array.from(document.querySelectorAll(".tilt-card"));
     const handleTiltMove = (e) => {
-      const card = e.currentTarget;
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const rotateX = (y - centerY) / 10;
-      const rotateY = (centerX - x) / 10;
-      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left, y = e.clientY - rect.top;
+      const centerX = rect.width / 2, centerY = rect.height / 2;
+      const rotateX = (y - centerY) / 10, rotateY = (centerX - x) / 10;
+      e.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
     };
     const handleTiltLeave = (e) => {
-      const card = e.currentTarget;
-      card.style.transform = "perspective(1000px) rotateX(0) rotateY(0) scale(1)";
+      e.currentTarget.style.transform = "perspective(1000px) rotateX(0) rotateY(0) scale(1)";
     };
-    tiltCards.forEach((card) => {
+    tiltCards.forEach(card => {
       on(card, "mousemove", handleTiltMove);
       on(card, "mouseleave", handleTiltLeave);
     });
 
-    // ---------- Magnetic buttons ----------
+    // ---------- Magnetic Buttons ----------
     const buttons = Array.from(document.querySelectorAll(".btn"));
     const handleBtnMove = (e) => {
-      const btn = e.currentTarget;
-      const rect = btn.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2, y = e.clientY - rect.top - rect.height / 2;
+      e.currentTarget.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
     };
-    const handleBtnLeave = (e) => {
-      const btn = e.currentTarget;
-      btn.style.transform = "translate(0, 0)";
-    };
-    buttons.forEach((btn) => {
+    const handleBtnLeave = (e) => { e.currentTarget.style.transform = "translate(0, 0)"; };
+    buttons.forEach(btn => {
       on(btn, "mousemove", handleBtnMove);
       on(btn, "mouseleave", handleBtnLeave);
     });
 
-    // ---------- Cursor glow ----------
+    // ---------- Cursor Glow ----------
     const cursorGlow = document.createElement("div");
     cursorGlow.className = "cursor-glow";
-    cursorGlow.style.position = "fixed";
-    cursorGlow.style.width = "400px";
-    cursorGlow.style.height = "400px";
-    cursorGlow.style.borderRadius = "50%";
-    cursorGlow.style.background =
-      "radial-gradient(circle, rgba(139, 92, 246, 0.15), transparent 70%)";
-    cursorGlow.style.pointerEvents = "none";
-    cursorGlow.style.zIndex = "9999";
-    cursorGlow.style.transform = "translate(-50%, -50%)";
-    cursorGlow.style.transition = "opacity 0.3s";
-    cursorGlow.style.opacity = "0";
+    Object.assign(cursorGlow.style, {
+      position: "fixed", width: "400px", height: "400px", borderRadius: "50%",
+      background: "radial-gradient(circle, rgba(139, 92, 246, 0.15), transparent 70%)",
+      pointerEvents: "none", zIndex: "9999", transform: "translate(-50%, -50%)",
+      transition: "opacity 0.3s", opacity: "0"
+    });
     document.body.appendChild(cursorGlow);
-
-    let mouseX = 0,
-      mouseY = 0,
-      glowX = 0,
-      glowY = 0;
-    const mouseMove = (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      cursorGlow.style.opacity = "1";
-    };
-    const mouseLeave = () => {
-      cursorGlow.style.opacity = "0";
-    };
+    let mouseX = 0, mouseY = 0, glowX = 0, glowY = 0;
+    const mouseMove = (e) => { mouseX = e.clientX; mouseY = e.clientY; cursorGlow.style.opacity = "1"; };
+    const mouseLeave = () => { cursorGlow.style.opacity = "0"; };
     on(document, "mousemove", mouseMove);
     on(document, "mouseleave", mouseLeave);
-
-    let rafId = 0;
-    const animateGlow = () => {
+    let rafId = requestAnimationFrame(function animate() {
       glowX += (mouseX - glowX) * 0.1;
       glowY += (mouseY - glowY) * 0.1;
       cursorGlow.style.left = `${glowX}px`;
       cursorGlow.style.top = `${glowY}px`;
-      rafId = requestAnimationFrame(animateGlow);
+      rafId = requestAnimationFrame(animate);
+    });
+
+    // ---------- Global Link Handler ----------
+    const handleLinkClick = (e) => {
+      const anchor = e.target.closest("a");
+      if (!anchor || anchor.target || anchor.getAttribute("href")?.includes(":")) return;
+      const href = anchor.getAttribute("href");
+      if (href && (href.startsWith("/") || href.startsWith("#"))) {
+        const id = href.replace("/", "").replace("#", "");
+        const target = document.getElementById(id === "" ? "home" : id);
+        if (target) {
+          e.preventDefault();
+          const offset = document.querySelector(".navbar")?.offsetHeight || 80;
+          window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - offset, behavior: "smooth" });
+          const newPath = id === "" ? "/Portfolio/" : `/Portfolio/${id}`;
+          window.history.replaceState(null, "", newPath);
+          document.querySelector(".nav-links")?.classList.remove("active");
+        }
+      }
     };
-    rafId = requestAnimationFrame(animateGlow);
+    on(document, "click", handleLinkClick);
 
     // ---------- Cleanup ----------
     return () => {
       revealObserver.disconnect();
       off(window, "scroll", parallaxHandler);
-
-      tiltCards.forEach((card) => {
-        off(card, "mousemove", handleTiltMove);
-        off(card, "mouseleave", handleTiltLeave);
-      });
-
-      buttons.forEach((btn) => {
-        off(btn, "mousemove", handleBtnMove);
-        off(btn, "mouseleave", handleBtnLeave);
-      });
-
+      off(document, "click", handleLinkClick);
       off(document, "mousemove", mouseMove);
       off(document, "mouseleave", mouseLeave);
-      if (rafId) cancelAnimationFrame(rafId);
-
-      // Remove dynamic containers/elements
-      if (particlesContainer && particlesContainer.parentNode) {
-        particlesContainer.parentNode.removeChild(particlesContainer);
-      }
-      if (floatingContainer && floatingContainer.parentNode) {
-        floatingContainer.parentNode.removeChild(floatingContainer);
-      }
-      if (cursorGlow && cursorGlow.parentNode) {
-        cursorGlow.parentNode.removeChild(cursorGlow);
-      }
+      cancelAnimationFrame(rafId);
+      [particlesContainer, floatingContainer, cursorGlow].forEach(el => el?.remove());
     };
   }, []);
 
